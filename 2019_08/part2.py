@@ -3,11 +3,7 @@ height = 6
 
 line = open('input.txt').read().strip()
 
-layers = []
-
-while len(line):
-    layers.append(line[:width * height])
-    line = line[width * height:]
+layers = [line[i:i+width*height] for i in range(0, len(line), width*height)]
 
 current = "2" * width * height
 
