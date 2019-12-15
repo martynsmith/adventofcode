@@ -1,12 +1,12 @@
 from collections import defaultdict
 import fileinput
+import networkx
 from decimal import Decimal, ROUND_CEILING
 import re
 
 ingredients_for = {}
-depends_on = {}
 amount_produced = {}
-
+dep_tree = networkx.DiGraph()
 
 # First we read all the data in
 for line in fileinput.input():
@@ -15,30 +15,19 @@ for line in fileinput.input():
     amount_produced[out_chemical] = out_quantity
     ingredients_for[out_chemical] = pairs
 
+    for _, c in pairs:
+        dep_tree.add_edge(out_chemical, c)
 
-# Figure out what chemicals depend on which
-def calculate_deps(chemical):
-    deps = set()
-    for _, in_chemical in ingredients_for[chemical]:
-        if in_chemical != 'ORE':
-            deps.add(in_chemical)
-            deps.update(calculate_deps(in_chemical))
+# This is a list of chemicals such that chemicals only depend on those that
+# come after them in the list
+ordered_chemicals = list(networkx.topological_sort(dep_tree))
+ordered_chemicals.remove('ORE')
 
-    return deps
-
-
-for chemical in amount_produced.keys():
-    depends_on[chemical] = calculate_deps(chemical)
-
-unordered_chemicals = set(amount_produced.keys())
-ordered_chemicals = []
-
-while unordered_chemicals:
-    for chemical in unordered_chemicals:
-        if depends_on[chemical].issubset(set(ordered_chemicals)):
-            ordered_chemicals.insert(0, chemical)
-            unordered_chemicals.remove(chemical)
-            break
+print()
+# from matplotlib import pyplot
+# f = pyplot.figure()
+# networkx.draw(dep_tree, with_labels=True, font_size=4)
+# f.savefig('foo.pdf')
 
 
 # Now for a given FUEL requirement we can determine the ORE requirement
@@ -54,6 +43,7 @@ def ore_required(fuel):
             del need[chemical]
 
     return need['ORE']
+
 
 # Part 1
 print(f"Part 1: {ore_required(1)} ORE required to produce 1 FUEL")
