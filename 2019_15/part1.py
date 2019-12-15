@@ -177,11 +177,9 @@ if __name__ == '__main__':
     executor = Executor(program, [])
     while uncharted_points:
         if current_position not in uncharted_points:
-            length, target_position = sorted([
-                (networkx.shortest_path_length(graph, current_position, p), p)
-                for p in uncharted_points.keys()
-            ])[0]
+            target_position = sorted([(d, p) for p, d in networkx.shortest_path_length(graph, current_position).items() if p in uncharted_points.keys()])[0][1]
             # print(f"moving from {current_position} => {target_position}")
+
             for target_position in networkx.shortest_path(graph, current_position, target_position)[1:]:
                 executor.input.append(VECTORS[target_position - current_position])
                 executor.run()
@@ -214,8 +212,7 @@ if __name__ == '__main__':
             raise NotImplementedError("nope")
 
     render_chamber(chamber)
-
-    print(networkx.shortest_path_length(graph, Vector(0, 0), oxygen_position))
+    print(f"shortest path length to oxygenator: {networkx.shortest_path_length(graph, Vector(0, 0), oxygen_position)}")
 
     oxygenated_positions = {oxygen_position}
     unoxygenated_positions = set([p for p, c in chamber.items() if c == ' '])
@@ -230,6 +227,6 @@ if __name__ == '__main__':
                     oxygenated_positions.add(t)
                     unoxygenated_positions.remove(t)
 
-        render_chamber(chamber)
 
-    print(minutes)
+    render_chamber(chamber)
+    print(f"{minutes} minutes to fully oxygenate")
