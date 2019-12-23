@@ -9,14 +9,27 @@ initial_card_position = 2020
 # shuffle_count = 1
 # initial_card_position = 2
 
+def egcd(a, b):
+    if a == 0:
+        return (b, 0, 1)
+    else:
+        g, y, x = egcd(b % a, a)
+        return (g, x - (b // a) * y, y)
+
+
+def modinv(a, m):
+    g, x, y = egcd(a, m)
+    if g != 1:
+        raise Exception('modular inverse does not exist')
+    else:
+        return x % m
+
+
 def deal_with_increment_factory(inc):
+    mi = modinv(inc, deck_size)
+
     def inner(card_pos):
-        x = 0
-
-        while (deck_size * x + card_pos) % inc != 0:
-            x += 1
-
-        return int((deck_size * x + card_pos) / inc)
+        return mi * card_pos % deck_size
 
     return inner
 
