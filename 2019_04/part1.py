@@ -28,7 +28,7 @@ for i in range(range_start, range_end):
     if not has_double(i):
         continue
     count += 1
-    print(i)
+    # print(i)
 
 print(f"count = {count}")
 # 454 is too low

@@ -1,0 +1,7 @@
+It seems I spend a bunch of time using `as uzize` or similar, is there safe ways to do this?
+    - I understand `as` a bit more now
+
+If I iterate a buffer that gives me strings in a loop, how do I "own" those strings in the outer scope?
+
+
+The iterable `collect` method typing is a PITA, options?

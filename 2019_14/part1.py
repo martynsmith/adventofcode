@@ -65,13 +65,14 @@ to_order = set(wanted.keys())
 ordered_chemicals = []
 
 while to_order:
-    for c in to_order:
+    for c in sorted(to_order):
         if wanted[c]['depends_on'].issubset(set(ordered_chemicals)):
             ordered_chemicals.append(c)
             to_order.remove(c)
             break
 
-# print(ordered_chemicals)
+ordered_chemicals = list(reversed(ordered_chemicals))
+print(ordered_chemicals)
 
 
 max_ore = 1000000000000
@@ -80,7 +81,7 @@ def ore_required(fuel):
     need = defaultdict(int)
     need['FUEL'] = fuel
 
-    for chemical in reversed(ordered_chemicals):
+    for chemical in ordered_chemicals:
         # print(f"need {need[chemical]} {chemical}")
         for c, q in gimme(chemical, need[chemical]).items():
             need[c] += q
@@ -90,6 +91,9 @@ def ore_required(fuel):
     return need['ORE']
 
 f = 11780000
+
+print(ore_required(1))
+raise SystemExit()
 
 while ore_required(f) < max_ore:
     print(f)
