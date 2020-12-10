@@ -4,20 +4,6 @@ from collections import defaultdict
 
 data = [int(x) for x in open('day10.txt').readlines()]
 
-# data = [
-#     16
-#     , 10
-#     , 15
-#     , 5
-#     , 1
-#     , 11
-#     , 7
-#     , 19
-#     , 6
-#     , 12
-#     , 4
-# ]
-
 j = 0
 
 counts = defaultdict(int)
@@ -30,16 +16,18 @@ counts[3] += 1
 
 print(f"part1: {counts[1] * counts[3]}")
 
+combinations_for = {0: 1}
 
-def count_possibilities_from(x):
-    count = 0
-    for n in range(x - 3, x):
-        if n in data:
-            count += count_possibilities_from(n)
-        elif n == 0:
-            return 1
+for n in sorted(data):
+    combinations_for.setdefault(n, 0)
+    if n - 1 in combinations_for:
+        combinations_for[n] += combinations_for[n - 1]
+    if n - 2 in combinations_for:
+        combinations_for[n] += combinations_for[n - 2]
+    if n - 3 in combinations_for:
+        combinations_for[n] += combinations_for[n - 3]
 
-    return count
+    counts[n - j] += 1
+    j = n
 
-
-print(f"part2: {count_possibilities_from(max(data))}")
+print(f"part2: {combinations_for[max(data)]}")
