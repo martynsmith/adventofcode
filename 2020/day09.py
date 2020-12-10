@@ -2,7 +2,7 @@
 
 import itertools
 
-data = open('day9.txt').readlines()
+data = open('day09.txt').readlines()
 
 preamble_length = 25
 

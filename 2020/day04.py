@@ -4,7 +4,7 @@ import re
 
 required_fields = {'byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'}
 
-data = open('day4.txt').read()
+data = open('day04.txt').read()
 passports = [dict(f.split(':') for f in re.split(r'\s+', p) if f) for p in re.split(r'\n\n+', data)]
 
 def part1_is_valid(p):

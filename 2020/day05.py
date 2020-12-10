@@ -4,7 +4,7 @@ import re
 
 required_fields = {'byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'}
 
-data = open('day5.txt').readlines()
+data = open('day05.txt').readlines()
 
 seat_ids = []
 

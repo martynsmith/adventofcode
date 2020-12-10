@@ -3,7 +3,7 @@
 import re
 from functools import reduce
 
-data = [l.strip() for l in open('day3.txt').readlines()]
+data = [l.strip() for l in open('day03.txt').readlines()]
 
 def tree_count(dx, dy):
     x = 0

@@ -2,7 +2,7 @@
 
 import re
 
-data = [re.search(r'(\d+)-(\d+) (\w): (\S+)', l.strip()).groups() for l in open('day2.txt').readlines()]
+data = [re.search(r'(\d+)-(\d+) (\w): (\S+)', l.strip()).groups() for l in open('day02.txt').readlines()]
 
 def part1():
     valid_count = 0

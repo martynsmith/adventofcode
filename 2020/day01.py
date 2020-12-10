@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-data = [int(l.strip()) for l in open('day1.txt').readlines()]
+data = [int(l.strip()) for l in open('day01.txt').readlines()]
 
 def part1():
     for x in data:

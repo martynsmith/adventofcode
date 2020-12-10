@@ -2,7 +2,7 @@
 
 import re
 
-data = open('day6.txt').read()
+data = open('day06.txt').read()
 groups = re.split(r'\n\n+', data.strip())
 
 yes_count = 0
