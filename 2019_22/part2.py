@@ -1,4 +1,5 @@
 import fileinput
+from time import time
 
 deck_size = 119315717514047
 shuffle_count = 101741582076661
@@ -65,11 +66,21 @@ print()
 card_position = initial_card_position
 shuffle_count = 5
 seen_positions = {card_position}
+# shuffle_count = 100001
+last_time = time()
 for s in range(shuffle_count):
     print(f"{s}: {card_position}")
     seen_positions.add(card_position)
     for i in instructions:
         card_position = i(card_position)
-    # print(f"{s / shuffle_count * 100:.7f}")
+    if card_position in seen_positions:
+        print(f"Duplicate position spotted at {s} iterations")
+        break
+    seen_positions.add(card_position)
+    if s % 100000 == 0:
+        print(f"{int(100000 / (time() - last_time))} shuffles/second ({(s / shuffle_count) * 100:.7f}% complete)")
+        last_time = time()
+        # print(f"{(s / shuffle_count) * 100:.7f}")
 
-# print(f"Card in position {initial_card_position} is {card_position}")
+print('Card in position 2020 is 76662668721855')
+print(f"Card in position {initial_card_position} is {card_position}")
