@@ -24,71 +24,62 @@ class Vector(NamedTuple):
             y = f"south {self.y}"
         return f"Vector({x}, {y})"
 
+    def turn_right(self):
+        return Vector(-self.y, self.x)
 
-data = [x.strip() for x in open('day12.txt').readlines()]
+    def turn_left(self):
+        return Vector(self.y, -self.x)
+
+    def move(self, action, value):
+        assert action in ('N', 'S', 'E', 'W')
+        if action == 'N':
+            return self + Vector(0, -value)
+        if action == 'S':
+            return self + Vector(0, value)
+        if action == 'E':
+            return self + Vector(value, 0)
+        if action == 'W':
+            return self + Vector(-value, 0)
+
+    def rotate(self, action, value):
+        assert action in ('L', 'R')
+        direction = self
+        for c in range(value // 90):
+            if action == 'L':
+                direction = direction.turn_left()
+            if action == 'R':
+                direction = direction.turn_right()
+        return direction
+
+
+actions = [(x[0], int(x[1:].strip())) for x in open('day12.txt').readlines()]
+
+# part 1
 
 direction = Vector(1, 0)
 position = Vector(0, 0)
 
-
-def turn_right(direction):
-    return Vector(-direction.y, direction.x)
-
-
-def turn_left(direction):
-    return Vector(direction.y, -direction.x)
-
-
-for line in data:
-    action = line[0]
-    value = int(line[1:].strip())
-
-    if action == 'N':
-        position += Vector(0, -value)
-    elif action == 'S':
-        position += Vector(0, value)
-    elif action == 'E':
-        position += Vector(value, 0)
-    elif action == 'W':
-        position += Vector(-value, 0)
-    elif action == 'L':
-        for c in range(value // 90):
-            direction = turn_left(direction)
-    elif action == 'R':
-        for c in range(value // 90):
-            direction = turn_right(direction)
-    elif action == 'F':
+for action, value in actions:
+    if action in ('N', 'S', 'E', 'W'):
+        position = position.move(action, value)
+    if action in ('L', 'R'):
+        direction = direction.rotate(action, value)
+    if action == 'F':
         position += direction * value
-    else:
-        raise ValueError(f"can't handle action {action}")
 
 print(f"part1: {abs(position.x) + abs(position.y)}")
 
-# Part 2
-waypoint_offset = Vector(10, -1)
+# part 2
+
+direction = Vector(10, -1)
 position = Vector(0, 0)
 
-for line in data:
-    action = line[0]
-    value = int(line[1:].strip())
-
-    if action == 'N':
-        waypoint_offset += Vector(0, -value)
-    elif action == 'S':
-        waypoint_offset += Vector(0, value)
-    elif action == 'E':
-        waypoint_offset += Vector(value, 0)
-    elif action == 'W':
-        waypoint_offset += Vector(-value, 0)
-    elif action == 'L':
-        for c in range(value // 90):
-            waypoint_offset = turn_left(waypoint_offset)
-    elif action == 'R':
-        for c in range(value // 90):
-            waypoint_offset = turn_right(waypoint_offset)
-    elif action == 'F':
-        position += waypoint_offset * value
-    else:
-        raise ValueError(f"can't handle action {action}")
+for action, value in actions:
+    if action in ('N', 'S', 'E', 'W'):
+        direction = direction.move(action, value)
+    if action in ('L', 'R'):
+        direction = direction.rotate(action, value)
+    if action == 'F':
+        position += direction * value
 
 print(f"part2: {abs(position.x) + abs(position.y)}")
