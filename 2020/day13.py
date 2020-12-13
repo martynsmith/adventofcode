@@ -16,11 +16,9 @@ wait_minutes, next_bus = sorted(schedule)[0]
 
 print(f"part1: {wait_minutes * next_bus}")
 
-print(f"bus count: {len(busses)}")
-busses = busses[:2]
 checks = []
 timestamp, timestamp_delta = busses.pop(0)
-timestamp += 69 + 23
+
 
 def is_valid():
     for offset, bus in checks:
@@ -32,17 +30,21 @@ def is_valid():
 while busses:
     offset, bus = busses.pop(0)
     checks.append((offset, bus))
+
     while not is_valid():
         timestamp += timestamp_delta
-    # timestamp_delta = timestamp
-    # print(offset, bus, timestamp, timestamp_delta)
 
-print("part2: 74306157408 (TOO LOW)")
+    ts1 = timestamp
+    timestamp += timestamp_delta
+    while not is_valid():
+        timestamp += timestamp_delta
 
+    timestamp_delta = timestamp - ts1
+    timestamp = ts1
+
+
+print("part2: 775230782877242")
 print(f"part2: {timestamp}")
-
-for offset, bus in checks:
-    print(f"{offset=} {bus=} {(timestamp + offset) % bus=}")
 
 #
 # print(timestamp)
