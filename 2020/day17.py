@@ -20,6 +20,7 @@ class Vector(NamedTuple):
 
 data = [l.strip() for l in open('day17.txt').readlines()]
 
+
 # data = [l.strip() for l in """
 # .#.
 # ..#
@@ -81,3 +82,27 @@ for s in range(6):
     grid = step(grid)
 
 print("part1:", len([x for x in grid.values() if x == '#']))
+
+
+class Vector4(NamedTuple):
+    x: int
+    y: int
+    z: int
+    w: int
+
+    def __add__(self, other):
+        return Vector4(self.x + other.x, self.y + other.y, self.z + other.z, self.w + other.w)
+
+    def neighbours(self):
+        neighbour_deltas = [Vector4(*v) for v in product([-1, 1, 0], repeat=4) if v != Vector4(0, 0, 0, 0)]
+
+        return [self + d for d in neighbour_deltas]
+
+grid = {
+    Vector4(*v, 0): c for v, c in initial_grid.items()
+}
+
+for s in range(6):
+    grid = step(grid)
+
+print("part2:", len([x for x in grid.values() if x == '#']))
